@@ -1,0 +1,20 @@
+.container {
+	padding: 15px;
+	max-width: 800px;
+}
+
+.panel-default {
+	padding: 15px;
+}
+
+hr {
+	margin: 20px auto;
+}
+
+ol {
+	margin-top: 20px;
+}
+
+.list-group-item:hover {
+	background-color: rgba(86, 61, 124, 0.15);
+}

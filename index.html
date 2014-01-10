@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Bootstrap file manager">
+		<meta name="author" content="Florian Dejonckheere">
+
+		<title>Bootstrap File Manager</title>
+
+		<!-- Bootstrap core CSS -->
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+		<!-- Custom styles for this template -->
+		<link href="bootstrap-fm.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="panel panel-default">
+				<h2>Bootstrap File Manager</h2>
+				<span>A simple PHP file manager using Twitter Bootstrap.</span>
+				<hr>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary">
+							<span class="fa fa-upload"></span>
+							Upload
+						</button>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default">
+							<span class="fa fa-file"></span>
+							New file
+						</button>
+						<button type="button" class="btn btn-default">
+							<span class="fa fa-folder"></span>
+							New folder
+						</button>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default">
+							<span class="fa fa-refresh"></span>
+							Refresh
+						</button>
+					</div>
+					<!--<div class="btn-group">
+						<button type="button" class="btn btn-default disabled">Rename</button>
+						<button type="button" class="btn btn-default disabled">Move</button>
+						<button type="button" class="btn btn-default disabled">Delete</button>
+					</div>-->
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+							Advanced <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Change permissions</a></li>
+							<li><a href="#">Change owner</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+					</div>
+				</div>
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Library</a></li>
+					<li class="active">Data</li>
+				</ol>
+				
+				<ul class="list-group">
+					<li class="list-group-item">
+						<span class="fa fa-folder"></span> Cras justo odio
+					</li>
+					<li class="list-group-item">
+						<span class="fa fa-folder"></span> Dapibus ac facilisis in
+					</li>
+					<li class="list-group-item">
+						<span class="fa fa-file"></span> Morbi leo risus
+					</li>
+					<li class="list-group-item">
+						<span class="fa fa-file"></span> Porta ac consectetur ac
+					</li>
+					<li class="list-group-item">
+						<span class="fa fa-file"></span> Vestibulum at eros
+					</li>
+				</ul>
+				<div class="center-block">
+					<ul class="pagination">
+						<li class="disabled"><a href="#">&laquo;</a></li>
+						<li class="active"><a href="#">1</a></li>
+						<li><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">4</a></li>
+						<li><a href="#">5</a></li>
+						<li><a href="#">&raquo;</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	</body>
+</html>
