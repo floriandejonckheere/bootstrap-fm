@@ -13,16 +13,27 @@
 
 require_once('config.php');
 
-header('Content-Type: application/json');
-
-$fDir = (isset($_GET['dir']) ? $_GET['dir'] : ROOT_DIR);
-$aPath = realpath((substr($fDir, 0, 1) == '/' ? $fDir : getcwd() . '/' . $fDir));
-$sContent = array('error'	=>	403);
-
-foreach($w_list as $w_dir){
-	if(strpos($aPath, $w_dir) !== 0)
-		unset($sContent['error']);
+function exception_handler($exception)
+{
+	$aErr['error'] = intval($exception->getMessage());
+	print_array($aErr);
 }
+set_exception_handler('exception_handler');
+
+// Request string
+$fDir = (isset($_GET['dir']) ? urldecode($_GET['dir']) : ROOT_DIR);
+// Absolute path
+$aPath = realpath((substr($fDir, 0, 1) == '/' ? $fDir : getcwd() . '/' . $fDir));
+if($aPath == false)
+	throw new Exception(404);
+
+$legal = false;
+foreach($w_list as $w_dir){
+	if(realpath($w_dir) == substr($aPath, 0, strlen(realpath($w_dir))))
+		$legal = true;
+}
+if($legal == false)
+	throw new Exception(403);
 
 if(!isset($sContent['error']))
 {
@@ -43,7 +54,12 @@ if(!isset($sContent['error']))
 		}
 	}
 }
+print_array($sContent);
 
-echo json_encode($sContent);
+function print_array($array)
+{
+	header('Content-Type: application/json');
+	echo json_encode($array);
+}
 
 ?>

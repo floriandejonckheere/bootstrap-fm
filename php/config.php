@@ -1,5 +1,9 @@
 <?php
-define('ROOT_DIR',	'/home/deluge/Torrents/');
+/*
+ * config.php - configuration
+ *
+ * */
+define('ROOT_DIR',	'/home/deluge/Torrents/Finished/');
 
 // White-list for allowed paths
 $w_list = array(
