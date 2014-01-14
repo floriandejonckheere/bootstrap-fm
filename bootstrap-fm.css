@@ -26,3 +26,10 @@ ol {
 .col-size {
 	padding-left: 10px;
 }
+
+.col-title {
+	word-wrap: break;
+	max-width: 800px;
+	text-overflow: clip;
+	overflow: hidden;
+}

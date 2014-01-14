@@ -52,6 +52,8 @@ if(!isset($sContent['error']))
 				array_push($sContent[(is_dir(realpath($fDir . '/' . $file)) ? 'directories' : 'files')], $file);
 			}
 		}
+		array_multisort($sContent['directories']);
+		array_multisort($sContent['files']);
 	}
 }
 print_array($sContent);

@@ -71,15 +71,16 @@
 					</div>
 				</div>
 				<ol class="breadcrumb">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Library</a></li>
-					<li class="active">Data</li>
+					<!-- ko foreach: breadcrumbs -->
+					<li><a href="#" data-bind="text: $data">Home</a></li>
+					<!-- /ko -->
+					<li class="active" data-bind="text: activeCrumb">Home</li>
 				</ol>
 				
 				<ul class="list-group" data-bind="foreach: entries">
 					<li class="list-group-item">
 						<div class="row">
-							<div class="col-md-5">
+							<div class="col-md-5 col-title">
 								<span class="fa fa-fw" data-bind="css: {'fa-folder': directory, 'fa-file': !directory()}"></span>
 								<a href="#" data-bind="text: title">title</a>
 							</div>

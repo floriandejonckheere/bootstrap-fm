@@ -34,7 +34,7 @@ $(document).ready(function(){
 	 * timestamp	Unix timestamp (integer)
 	 *
 	 * */
-	function FileEntry(title, owner, group, perms, size, timestamp)
+	function FileListEntry(title, owner, group, perms, size, timestamp)
 	{
 		var self = this;
 		self.title	= ko.observable(title);
@@ -42,17 +42,28 @@ $(document).ready(function(){
 		self.group	= ko.observable(group);
 		self.perms	= ko.observable(perms);
 		self.directory	= ko.observable(self.perms().substring(0,1) == 'd' ? true : false);
-		self.size	= ko.observable((self.directory() ? '-' : bytesToSize(size)));
+		self.size	= ko.observable((self.directory() ? '' : bytesToSize(size)));
 		self.timestamp	= ko.observable(timestampToDate(timestamp));
 	}
 
 	function FileListViewModel()
 	{
 		var self = this;
-		self.entries = ko.observableArray([
-						new FileEntry('File', 'florian', 'users', '-rw-r--r--', 1000000, 1234567890),
-						new FileEntry('Folder', 'florian', 'users', 'drw-r--r--', 0, 1234567890)
-						]);
+
+		self.entries	 = ko.observableArray();
+		self.breadcrumbs = ko.observableArray();
+		self.activeCrumb = ko.observable();
+		
+		$.getJSON('php/list.php', function(data){
+			console.log(data);
+			var split = data.path.split('/');
+			self.breadcrumbs(split.slice(0, split.length - 1));
+			self.activeCrumb(split[split.length]);
+			for(i = 0 ; i < data.directories.length ; i++)
+			{
+				self.entries.push(new FileListEntry(data.directories[i], 'florian', 'users', 'drw-r--r--', 1000000, 1234567890));
+			}
+		});
 	}
 
 	ko.applyBindings(new FileListViewModel());
