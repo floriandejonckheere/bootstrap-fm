@@ -11,8 +11,8 @@ hr {
 	margin: 20px auto;
 }
 
-ol {
-	margin-top: 20px;
+.btn-toolbar {
+	margin-bottom: 20px;
 }
 
 .list-group-item:hover {

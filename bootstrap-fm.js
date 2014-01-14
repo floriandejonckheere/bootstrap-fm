@@ -3,7 +3,10 @@
  *
  * */
 
-//http://stackoverflow.com/questions/15900485/correctly-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+/*
+ * Helper functions
+ *
+ * */
 function bytesToSize(bytes)
 {
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -24,6 +27,7 @@ function timestampToDate(time)
 }
 
 $(document).ready(function(){
+	$('#error-message').parent().hide();
 	/*
 	 * FileEntry - file entry
 	 * title	file-/directoryname (string)
@@ -54,11 +58,24 @@ $(document).ready(function(){
 		self.breadcrumbs = ko.observableArray();
 		self.activeCrumb = ko.observable();
 		
-		$.getJSON('php/list.php', function(data){
+		$.getJSON('php/list.php?dir=/home/deluge/Torrents/Finished', function(data){
 			console.log(data);
+			if(data.error)
+			{
+				switch(data.error)
+				{
+					case 404:	$('#error-message').html('That directory was not found.').parent().show();
+							return;
+					case 403:	$('#error-message').html('You do not have permission to list that directory').parent().show();
+							return;
+					default:	$('#error-message').html('Unknown error').parent().show();
+							return;
+				}
+			}
+			
 			var split = data.path.split('/');
-			self.breadcrumbs(split.slice(0, split.length - 1));
-			self.activeCrumb(split[split.length]);
+			self.breadcrumbs(split.slice(1, split.length - 1));
+			self.activeCrumb(split[split.length - 1]);
 			for(i = 0 ; i < data.directories.length ; i++)
 			{
 				self.entries.push(new FileListEntry(data.directories[i], 'florian', 'users', 'drw-r--r--', 1000000, 1234567890));
