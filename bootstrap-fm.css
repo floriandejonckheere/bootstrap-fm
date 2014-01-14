@@ -1,6 +1,6 @@
 .container {
 	padding: 15px;
-	max-width: 800px;
+	max-width: 900px;
 }
 
 .panel-default {
@@ -17,4 +17,12 @@ ol {
 
 .list-group-item:hover {
 	background-color: rgba(86, 61, 124, 0.15);
+}
+
+.col-md-1 {
+	padding: 0;
+}
+
+.col-size {
+	padding-left: 10px;
 }

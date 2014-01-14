@@ -15,6 +15,11 @@
 
 		<!-- Custom styles for this template -->
 		<link href="bootstrap-fm.css" rel="stylesheet">
+
+		<script type="text/JavaScript" src="//code.jquery.com/jquery.js"></script>
+		<script type="text/JavaScript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		<script type="text/JavaScript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+		<script type="text/JavaScript" src="bootstrap-fm.js"></script>
 	</head>
 
 	<body>
@@ -71,20 +76,21 @@
 					<li class="active">Data</li>
 				</ol>
 				
-				<ul class="list-group">
+				<ul class="list-group" data-bind="foreach: entries">
 					<li class="list-group-item">
 						<div class="row">
-							<div class="col-md-6">
-								<span class="fa fa-fw fa-folder"></span>
-								<a href="#">Cras justo odio</a>
+							<div class="col-md-5">
+								<span class="fa fa-fw" data-bind="css: {'fa-folder': directory, 'fa-file': !directory()}"></span>
+								<a href="#" data-bind="text: title">title</a>
 							</div>
-							<div class="col-md-1">florian</div>
-							<div class="col-md-1">users</div>
-							<div class="col-md-1">-rw-r--r--</div>
-							<div class="col-md-3 text-right">25 Dec 2012 12:17</div>
+							<div class="col-md-1" data-bind="text: owner">owner</div>
+							<div class="col-md-1" data-bind="text: group">group</div>
+							<div class="col-md-1" data-bind="text: perms">perms</div>
+							<div class="col-md-1 text-right" data-bind="text: size">size</div>
+							<div class="col-md-3 text-right" data-bind="text: timestamp">timestamp</div>
 						</div>
 					</li>
-					<li class="list-group-item">
+					<!--<li class="list-group-item">
 						<span class="fa fa-fw fa-folder"></span> 
 						<a href="#">Dapibus ac facilisis in</a>
 					</li>
@@ -93,13 +99,22 @@
 						<a href="#">Morbi leo risus</a>
 					</li>
 					<li class="list-group-item">
-						<span class="fa fa-fw fa-file"></span>
-						<a href="#">Porta ac consectetur ac</a>
+						<div class="row">
+							<div class="col-md-5">
+								<span class="fa fa-fw fa-file"></span>
+								<a href="#">Porta ac consectetur ac</a>
+							</div>
+							<div class="col-md-1">florian</div>
+							<div class="col-md-1">users</div>
+							<div class="col-md-1">-rw-r--r--</div>
+							<div class="col-md-1 text-left" style="padding-left: 20px;">5K</div>
+							<div class="col-md-3 text-right">25 Dec 2012 12:17</div>
+						</div>
 					</li>
 					<li class="list-group-item">
 						<span class="fa fa-fw fa-file"></span>
 						<a href="#">Vestibulum at eros</a>
-					</li>
+					</li>-->
 				</ul>
 				<div class="center-block">
 					<ul class="pagination">
@@ -114,8 +129,5 @@
 				</div>
 			</div>
 		</div>
-		<script type="text/JavaScript" src="//code.jquery.com/jquery.js"></script>
-		<script type="text/JavaScript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-		<script type="text/JavaScript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
 	</body>
 </html>
