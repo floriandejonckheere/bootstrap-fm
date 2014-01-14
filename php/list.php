@@ -16,13 +16,13 @@ require_once('perms.php');
 
 function exception_handler($exception)
 {
-	$aErr['error'] = intval($exception->getMessage());
+	$aErr['error']	= intval($exception->getMessage());
 	print_array($aErr);
 }
 set_exception_handler('exception_handler');
 
 // Request string
-$fDir = (isset($_GET['dir']) ? urldecode($_GET['dir']) : ROOT_DIR);
+$fDir = ((isset($_GET['dir']) && !empty($_GET['dir'])) ? urldecode($_GET['dir']) : ROOT_DIR);
 // Absolute path
 $aPath = realpath((substr($fDir, 0, 1) == '/' ? $fDir : getcwd() . '/' . $fDir));
 if($aPath == false)
@@ -38,9 +38,10 @@ if($legal == false)
 
 if(!isset($sContent['error']))
 {
+	$sContent['path'] = $aPath;
 	if(!($hDir = opendir($fDir)))
 	{
-		$sContent['errors'] = 404;
+		throw new Exception(404);
 	} else {
 		$sContent['path'] = $aPath;
 		$sContent['entries'] = array();

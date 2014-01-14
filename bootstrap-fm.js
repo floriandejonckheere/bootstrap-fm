@@ -57,32 +57,52 @@ $(document).ready(function(){
 		self.entries	 = ko.observableArray();
 		self.breadcrumbs = ko.observableArray();
 		self.activeCrumb = ko.observable();
-		
-		$.getJSON('php/list.php', function(data){
-			console.log(data);
-			if(data.error)
-			{
-				switch(data.error)
+
+		self.query	 = ko.observable('');
+		self.visit = function(data)
+		{
+			self.query('/' + self.breadcrumbs.slice(0, self.breadcrumbs().indexOf(data) + 1).join('/'));
+			self.refresh();
+		}
+
+		self.subdir = function(data)
+		{
+			self.query('/' + self.breadcrumbs().join('/') + '/' + self.activeCrumb() + '/' + data.name());
+			self.refresh();
+		}
+
+		self.refresh = function()
+		{
+			console.log('php/list.php?dir=' + encodeURIComponent(self.query()));
+			$.getJSON('php/list.php?dir=' + encodeURIComponent(self.query()), function(data){
+				console.log(data);
+				if(data.error)
 				{
-					case 404:	$('#error-message').html('That directory was not found.').parent().show();
-							return;
-					case 403:	$('#error-message').html('You do not have permission to list that directory').parent().show();
-							return;
-					default:	$('#error-message').html('Unknown error').parent().show();
-							return;
+					switch(data.error)
+					{
+						case 404:	$('#error-message').html('That directory was not found.').parent().show();
+								return;
+						case 403:	$('#error-message').html('You do not have permission to list that directory').parent().show();
+								return;
+						default:	$('#error-message').html('Unknown error').parent().show();
+								return;
+					}
 				}
-			}
-			
-			var split = data.path.split('/');
-			self.breadcrumbs(split.slice(1, split.length - 1));
-			self.activeCrumb(split[split.length - 1]);
-			for(i = 0 ; i < data.entries.length ; i++)
-			{
-				var entry = data.entries[i];
-				self.entries.push(new FileListEntry(entry['name'], entry['owner'], entry['group'], entry['permissions'], entry['size'], entry['timestamp']));
-			}
-		});
+				
+				var split = data.path.split('/');
+				self.breadcrumbs(split.slice(1, split.length - 1));
+				self.activeCrumb(split[split.length - 1]);
+				self.entries().length = 0;
+				for(i = 0 ; i < data.entries.length ; ++i)
+				{
+					var entry = data.entries[i];
+					self.entries.push(new FileListEntry(entry['name'], entry['owner'], entry['group'], entry['permissions'], entry['size'], entry['timestamp']));
+				}
+			});
+		}
 	}
 
-	ko.applyBindings(new FileListViewModel());
+	var fModel = new FileListViewModel();
+	fModel.refresh();
+	ko.applyBindings(fModel);
 });
