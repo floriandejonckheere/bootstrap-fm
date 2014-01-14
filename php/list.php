@@ -12,6 +12,7 @@
  * */
 
 require_once('config.php');
+require_once('perms.php');
 
 function exception_handler($exception)
 {
@@ -42,18 +43,26 @@ if(!isset($sContent['error']))
 		$sContent['errors'] = 404;
 	} else {
 		$sContent['path'] = $aPath;
-		$sContent['directories'] = array();
-		$sContent['files'] = array();
+		$sContent['entries'] = array();
 		
 		while (false !== ($file = readdir($hDir)))
 		{
 			if($file != '.' && $file != '..')
 			{
-				array_push($sContent[(is_dir(realpath($fDir . '/' . $file)) ? 'directories' : 'files')], $file);
+				$sFile = stat($aPath . '/' . $file);
+
+				$aFile = array();
+				$aFile['name'] = $file;
+				$aFile['owner'] = posix_getpwuid($sFile['uid'])['name'];
+				$aFile['group'] = posix_getgrgid($sFile['gid'])['name'];
+				$aFile['permissions'] = getHumanPerms($aPath . '/' . $file);
+				$aFile['size'] = $sFile['size'];
+				$aFile['timestamp'] = $sFile['mtime'];
+				
+				array_push($sContent['entries'], $aFile);
 			}
 		}
-		array_multisort($sContent['directories']);
-		array_multisort($sContent['files']);
+		array_multisort($sContent['entries']);
 	}
 }
 print_array($sContent);

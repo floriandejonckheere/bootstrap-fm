@@ -12,7 +12,7 @@ function bytesToSize(bytes)
 	var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
 	if (bytes == 0) return '0 B';
 	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-	return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+	return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 };
 
 function timestampToDate(time)
@@ -38,10 +38,10 @@ $(document).ready(function(){
 	 * timestamp	Unix timestamp (integer)
 	 *
 	 * */
-	function FileListEntry(title, owner, group, perms, size, timestamp)
+	function FileListEntry(name, owner, group, perms, size, timestamp)
 	{
 		var self = this;
-		self.title	= ko.observable(title);
+		self.name	= ko.observable(name);
 		self.owner	= ko.observable(owner);
 		self.group	= ko.observable(group);
 		self.perms	= ko.observable(perms);
@@ -58,7 +58,7 @@ $(document).ready(function(){
 		self.breadcrumbs = ko.observableArray();
 		self.activeCrumb = ko.observable();
 		
-		$.getJSON('php/list.php?dir=/home/deluge/Torrents/Finished', function(data){
+		$.getJSON('php/list.php', function(data){
 			console.log(data);
 			if(data.error)
 			{
@@ -76,9 +76,10 @@ $(document).ready(function(){
 			var split = data.path.split('/');
 			self.breadcrumbs(split.slice(1, split.length - 1));
 			self.activeCrumb(split[split.length - 1]);
-			for(i = 0 ; i < data.directories.length ; i++)
+			for(i = 0 ; i < data.entries.length ; i++)
 			{
-				self.entries.push(new FileListEntry(data.directories[i], 'florian', 'users', 'drw-r--r--', 1000000, 1234567890));
+				var entry = data.entries[i];
+				self.entries.push(new FileListEntry(entry['name'], entry['owner'], entry['group'], entry['permissions'], entry['size'], entry['timestamp']));
 			}
 		});
 	}

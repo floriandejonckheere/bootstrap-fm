@@ -28,8 +28,7 @@ hr {
 }
 
 .col-title {
-	word-wrap: break;
-	max-width: 800px;
-	text-overflow: clip;
 	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
