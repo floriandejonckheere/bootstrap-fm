@@ -56,25 +56,29 @@ $(document).ready(function(){
 
 		self.entries	 = ko.observableArray();
 		self.breadcrumbs = ko.observableArray();
-		self.activeCrumb = ko.observable();
 
 		self.query	 = ko.observable('');
+		// Origin: breadcrumb
 		self.visit = function(data)
 		{
-			self.query('/' + self.breadcrumbs.slice(0, self.breadcrumbs().indexOf(data) + 1).join('/'));
+			self.query(self.breadcrumbs.slice(1, self.breadcrumbs().indexOf(data) + 1).join('/'));
 			self.refresh();
 		}
 
+		// Origin: FileListEntry
 		self.subdir = function(data)
 		{
-			self.query('/' + self.breadcrumbs().join('/') + '/' + self.activeCrumb() + '/' + data.name());
+			if(!data.directory())
+				window.location.href = 'php/download.php?file=';
+			var path = (self.breadcrumbs().length > 1 ? self.breadcrumbs().slice(1, self.breadcrumbs().length).join('/') + '/' : '');
+			self.query(path + data.name());
 			self.refresh();
 		}
 
 		self.refresh = function()
 		{
-			console.log('php/list.php?dir=' + encodeURIComponent(self.query()));
-			$.getJSON('php/list.php?dir=' + encodeURIComponent(self.query()), function(data){
+			console.log('php/list.php?start=2&count=20&dir=' + self.query());
+			$.getJSON('php/list.php?start=2&count=20&dir=' + encodeURIComponent(self.query()), function(data){
 				console.log(data);
 				if(data.error)
 				{
@@ -89,9 +93,9 @@ $(document).ready(function(){
 					}
 				}
 				
-				var split = data.path.split('/');
-				self.breadcrumbs(split.slice(1, split.length - 1));
-				self.activeCrumb(split[split.length - 1]);
+				self.breadcrumbs(data.path.split('/'));
+				console.log(self.breadcrumbs());
+				console.log(self.breadcrumbs().length - 1);
 				self.entries().length = 0;
 				for(i = 0 ; i < data.entries.length ; ++i)
 				{

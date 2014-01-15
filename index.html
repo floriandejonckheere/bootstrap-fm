@@ -19,6 +19,7 @@
 		<script type="text/JavaScript" src="//code.jquery.com/jquery.js"></script>
 		<script type="text/JavaScript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 		<script type="text/JavaScript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+		<script type="text/JavaScript" src="knockout-repeat.js"></script>
 		<script type="text/JavaScript" src="bootstrap-fm.js"></script>
 	</head>
 
@@ -75,10 +76,15 @@
 					<span id="error-message"></span>
 				</div>
 				<ol class="breadcrumb">
-					<!-- ko foreach: breadcrumbs -->
-					<li><a href="#" data-bind="text: $data, click: $parent.visit">Home</a></li>
+					<!-- ko foreach: breadcrumbs  -->
+						<!-- ko if: ($index() < ($parent.breadcrumbs().length - 1)) -->
+							<li><a href="#" data-bind="text: $data, click: $parent.visit">Inactive</a></li>
+						<!-- /ko -->
+						<!-- ko if: ($index() === ($parent.breadcrumbs().length - 1)) -->
+							<li class="active" data-bind="text: $data">Active</li>
+						<!-- /ko -->
 					<!-- /ko -->
-					<li class="active" data-bind="text: activeCrumb">Home</li>
+
 				</ol>
 				
 				<ul class="list-group" data-bind="foreach: entries">

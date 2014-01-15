@@ -21,50 +21,37 @@ function exception_handler($exception)
 }
 set_exception_handler('exception_handler');
 
-// Request string
-$fDir = ((isset($_GET['dir']) && !empty($_GET['dir'])) ? urldecode($_GET['dir']) : ROOT_DIR);
-// Absolute path
-$aPath = realpath((substr($fDir, 0, 1) == '/' ? $fDir : getcwd() . '/' . $fDir));
-if($aPath == false)
+$relPath = ((isset($_GET['dir']) && !empty($_GET['dir'])) ? urldecode($_GET['dir']) : '.');
+$absPath = realpath(ROOT_DIR . '/' . $relPath);
+//$fDir = realpath((isset($_GET['dir']) && !empty($_GET['dir'])) ? ROOT_DIR . '/' . urldecode($_GET['dir']) : ROOT_DIR);
+
+if(!$absPath)
 	throw new Exception(404);
 
-$legal = false;
-foreach($w_list as $w_dir){
-	if(realpath($w_dir) == substr($aPath, 0, strlen(realpath($w_dir))))
-		$legal = true;
-}
-if($legal == false)
+if(realpath(ROOT_DIR) != substr($absPath, 0, strlen(realpath(ROOT_DIR))))
 	throw new Exception(403);
 
-if(!isset($sContent['error']))
-{
-	$sContent['path'] = $aPath;
-	if(!($hDir = opendir($fDir)))
-	{
-		throw new Exception(404);
-	} else {
-		$sContent['path'] = $aPath;
-		$sContent['entries'] = array();
-		
-		while (false !== ($file = readdir($hDir)))
-		{
-			if($file != '.' && $file != '..')
-			{
-				$sFile = stat($aPath . '/' . $file);
 
-				$aFile = array();
-				$aFile['name'] = $file;
-				$aFile['owner'] = posix_getpwuid($sFile['uid'])['name'];
-				$aFile['group'] = posix_getgrgid($sFile['gid'])['name'];
-				$aFile['permissions'] = getHumanPerms($aPath . '/' . $file);
-				$aFile['size'] = $sFile['size'];
-				$aFile['timestamp'] = $sFile['mtime'];
-				
-				array_push($sContent['entries'], $aFile);
-			}
-		}
-		array_multisort($sContent['entries']);
-	}
+$sContent['path'] = array_pop(explode('/', realpath(ROOT_DIR))) . ($relPath != '.' ? '/' . $relPath : '');
+$sContent['entries'] = array();
+
+$aList	= scandir($absPath, SCANDIR_SORT_ASCENDING);
+$iStart	= (isset($_GET['start']) ? intval($_GET['start']) : 0);
+$iCount	= (isset($_GET['count']) ? min($iStart + intval($_GET['count']), count($aList)) : count($aList));
+
+for($i = $iStart ; $i < $iCount ; ++$i)
+{
+	$sFile = stat($absPath . '/' . $aList[$i]);
+
+	$aFile = array();
+	$aFile['name'] = $aList[$i];
+	$aFile['owner'] = posix_getpwuid($sFile['uid'])['name'];
+	$aFile['group'] = posix_getgrgid($sFile['gid'])['name'];
+	$aFile['permissions'] = getHumanPerms($absPath . '/' . $aList[$i]);
+	$aFile['size'] = $sFile['size'];
+	$aFile['timestamp'] = $sFile['mtime'];
+	
+	array_push($sContent['entries'], $aFile);
 }
 print_array($sContent);
 
