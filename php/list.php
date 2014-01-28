@@ -6,12 +6,13 @@
  /*
  * Error code	Description
  * ----------	-----------
- * 403		Directory not white-listed
+ * 403		Forbidden directory
  * 404		File or directory not found
  *
  * */
 
 require_once('config.php');
+require_once('common.php');
 require_once('perms.php');
 
 function exception_handler($exception)
@@ -23,7 +24,6 @@ set_exception_handler('exception_handler');
 
 $relPath = ((isset($_GET['dir']) && !empty($_GET['dir'])) ? urldecode($_GET['dir']) : '.');
 $absPath = realpath(ROOT_DIR . '/' . $relPath);
-//$fDir = realpath((isset($_GET['dir']) && !empty($_GET['dir'])) ? ROOT_DIR . '/' . urldecode($_GET['dir']) : ROOT_DIR);
 
 if(!$absPath)
 	throw new Exception(404);
@@ -38,6 +38,8 @@ $sContent['entries'] = array();
 $aList	= scandir($absPath, SCANDIR_SORT_ASCENDING);
 $iStart	= (isset($_GET['start']) ? intval($_GET['start']) : 0);
 $iCount	= (isset($_GET['count']) ? min($iStart + intval($_GET['count']), count($aList)) : count($aList));
+
+// TODO: directories first, then files
 
 for($i = $iStart ; $i < $iCount ; ++$i)
 {
@@ -54,11 +56,5 @@ for($i = $iStart ; $i < $iCount ; ++$i)
 	array_push($sContent['entries'], $aFile);
 }
 print_array($sContent);
-
-function print_array($array)
-{
-	header('Content-Type: application/json');
-	echo json_encode($array);
-}
 
 ?>

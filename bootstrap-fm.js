@@ -68,9 +68,11 @@ $(document).ready(function(){
 		// Origin: FileListEntry
 		self.subdir = function(data)
 		{
-			if(!data.directory())
-				window.location.href = 'php/download.php?file=';
 			var path = (self.breadcrumbs().length > 1 ? self.breadcrumbs().slice(1, self.breadcrumbs().length).join('/') + '/' : '');
+
+			if(!data.directory())
+				window.location.href = 'php/download.php?file=' + path + data.name();
+			
 			self.query(path + data.name());
 			self.refresh();
 		}
@@ -92,7 +94,6 @@ $(document).ready(function(){
 								return;
 					}
 				}
-				
 				self.breadcrumbs(data.path.split('/'));
 				console.log(self.breadcrumbs());
 				console.log(self.breadcrumbs().length - 1);
