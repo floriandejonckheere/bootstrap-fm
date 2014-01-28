@@ -3,7 +3,7 @@
  * config.php - configuration
  *
  * */
-define('ROOT_DIR',	'/home/deluge/Torrents/Finished/');
+define('ROOT_DIR',	'/srv/http/bootstrap-fm/testdir');
 
 /*
  * DEBUG OPTIONS

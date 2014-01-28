@@ -80,7 +80,7 @@ $(document).ready(function(){
 		self.refresh = function()
 		{
 			console.log('php/list.php?start=2&count=20&dir=' + self.query());
-			$.getJSON('php/list.php?start=2&count=20&dir=' + encodeURIComponent(self.query()), function(data){
+			$.getJSON('php/list.php?start=2&dir=' + encodeURIComponent(self.query()), function(data){
 				console.log(data);
 				if(data.error)
 				{

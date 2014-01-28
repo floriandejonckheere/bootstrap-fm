@@ -41,6 +41,9 @@ $iCount	= (isset($_GET['count']) ? min($iStart + intval($_GET['count']), count($
 
 // TODO: directories first, then files
 
+$aDirs	= array();
+$aFiles	= array();
+
 for($i = $iStart ; $i < $iCount ; ++$i)
 {
 	$sFile = stat($absPath . '/' . $aList[$i]);
@@ -52,9 +55,17 @@ for($i = $iStart ; $i < $iCount ; ++$i)
 	$aFile['permissions'] = getHumanPerms($absPath . '/' . $aList[$i]);
 	$aFile['size'] = $sFile['size'];
 	$aFile['timestamp'] = $sFile['mtime'];
-	
-	array_push($sContent['entries'], $aFile);
+
+	if(is_dir($absPath . '/' . $aList[$i]))
+	{
+		array_push($aDirs, $aFile);
+	} else {
+		array_push($aFiles, $aFile);
+	}
 }
+array_multisort($aDirs);
+array_multisort($aFiles);
+$sContent['entries'] = array_merge($aDirs, $aFiles);
 print_array($sContent);
 
 ?>
