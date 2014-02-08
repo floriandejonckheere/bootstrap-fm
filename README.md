@@ -2,7 +2,7 @@
 
 Bootstrap-fm is an attempt at a clean simple PHP-based file manager using the Bootstrap framework. Currently it can only list and download arbitrary (whitelisted) directories and files.
 
-[Demo](http://floriandejonckheere.be/bootstrap-fm)
+[Demo](http://floriandejonckheere.be/projects/bootstrap-fm)
 
 **WARNING**: This script has not been tested for exploits/general security. Do NOT use this publicly.
 
